@@ -1,6 +1,22 @@
 version: '3.8'
 
 services:
+  redis:
+    image: redis:7.0.4
+    container_name: slips-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+
   slips:
     build:
       context: .
@@ -11,6 +27,8 @@ services:
       - "55000:55000"  # Web interface port
     environment:
       - TZ=UTC
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
       - NVIDIA_VISIBLE_DEVICES=all  # Enable all NVIDIA GPUs
     volumes:
       - ./dataset:/StratosphereLinuxIPS/dataset  # For PCAP files
@@ -28,6 +46,8 @@ services:
     cap_add:
       - NET_ADMIN  # Required for network monitoring
     network_mode: host  # For Linux/Windows hosts
+    depends_on:
+      - redis
     # For MacOS, comment out network_mode and uncomment the following:
     # networks:
     #   - slips_network
@@ -36,6 +56,10 @@ services:
       - /dev/nvidia0:/dev/nvidia0  # Mount NVIDIA device
       - /dev/nvidiactl:/dev/nvidiactl
       - /dev/nvidia-modeset:/dev/nvidia-modeset
+
+volumes:
+  redis_data:
+    driver: local
 
 # For MacOS, uncomment this:
 # networks:

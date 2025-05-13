@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install -y \
     python3.10-dev \
     python3-pip \
     git \
-    redis-server \
     zeek \
     build-essential \
     libssl-dev \
@@ -45,6 +44,5 @@ EXPOSE 55000
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 
-# Start Redis server and run Slips
-CMD service redis-server start && \
-    ./slips.py -f /StratosphereLinuxIPS/dataset/*.pcap -o /StratosphereLinuxIPS/output 
+# Run Slips
+CMD ./slips.py -f /StratosphereLinuxIPS/dataset/*.pcap -o /StratosphereLinuxIPS/output 
