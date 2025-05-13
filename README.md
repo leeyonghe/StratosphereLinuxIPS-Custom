@@ -1,6 +1,13 @@
+# 주의사항
+
+이 저장소는 [StratosphereLinuxIPS](https://github.com/stratosphereips/StratosphereLinuxIPS)의 원본 프로젝트를 기반으로 하며, 코드 분석 및 커스터마이징 목적으로 포크되었습니다. 원본 프로젝트의 모든 권리는 Stratosphere Laboratory에 있습니다.
+
+---
+
 <h1 align="center">
 Slips v1.1.9
 </h1>
+
 
 
 [![License](https://img.shields.io/badge/license-GPLv2-blue)](./LICENSE)
@@ -27,52 +34,51 @@ Slips v1.1.9
 <hr>
 
 
-# Table of Contents
+# 목차
 
-- [Introduction](#introduction)
-- [Usage](#usage)
-- [GUI](#graphical-user-interface)
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Features](#features)
-- [Contributing](#contributing)
-- [Documentation](#documentation)
-- [Troubleshooting](#troubleshooting)
-- [License](#license)
-- [Credits](#credits)
-- [Changelog](#changelog)
-- [Roadmap](#roadmap)
-- [Demos](#demos)
-- [Funding](#funding)
-
-
-# Slips: Behavioral Machine Learning-Based Intrusion Prevention System
+- [소개](#소개)
+- [사용법](#사용법)
+- [GUI](#그래픽-사용자-인터페이스)
+- [요구사항](#요구사항)
+- [설치](#설치)
+- [설정](#설정)
+- [기능](#기능)
+- [기여하기](#기여하기)
+- [문서](#문서)
+- [문제해결](#문제해결)
+- [라이선스](#라이선스)
+- [크레딧](#크레딧)
+- [변경이력](#변경이력)
+- [로드맵](#로드맵)
+- [데모](#데모)
+- [자금지원](#자금지원)
 
 
-Slips is a powerful endpoint behavioral intrusion prevention and detection system that uses machine learning to detect malicious behaviors in network traffic. Slips can work with network traffic in real-time, PCAP files, and network flows from popular tools like Suricata, Zeek/Bro, and Argus. Slips threat detection is based on a combination of machine learning models trained to detect malicious behaviors, 40+ threat intelligence feeds, and expert heuristics. Slips gathers evidence of malicious behavior and uses extensively trained thresholds to trigger alerts when enough evidence is accumulated.
+# Slips: 행동 기반 머신러닝 침입 방지 시스템
+
+
+Slips는 머신러닝을 사용하여 네트워크 트래픽에서 악의적인 행동을 감지하는 강력한 엔드포인트 행동 기반 침입 방지 및 탐지 시스템입니다. Slips는 실시간 네트워크 트래픽, PCAP 파일, Suricata, Zeek/Bro, Argus와 같은 인기 도구의 네트워크 흐름을 분석할 수 있습니다. Slips의 위협 탐지는 악의적인 행동을 감지하도록 훈련된 머신러닝 모델, 40개 이상의 위협 인텔리전스 피드, 전문가 휴리스틱의 조합을 기반으로 합니다. Slips는 악의적인 행동의 증거를 수집하고 충분한 증거가 누적될 때 경고를 트리거하기 위해 광범위하게 훈련된 임계값을 사용합니다.
 
 <img src="https://raw.githubusercontent.com/stratosphereips/StratosphereLinuxIPS/develop/docs/images/slips.gif" width="850px" title="Slips in action.">
 
 ---
 
 
-# Introduction
-Slips is the first free software behavioral machine learning-based IDS/IPS for endpoints. It was created in 2012 by Sebastian Garcia at the Stratosphere Laboratory, AIC, FEE, Czech Technical University in Prague. The goal was to offer a local IDS/IPS that leverages machine learning to detect network attacks using behavioral analysis.
+# 소개
+Slips는 엔드포인트용 최초의 무료 행동 기반 머신러닝 IDS/IPS입니다. 2012년 체코 기술 대학교 AIC의 Stratosphere Laboratory에서 Sebastian Garcia에 의해 만들어졌습니다. 목표는 행동 분석을 사용하여 네트워크 공격을 감지하는 머신러닝을 활용하는 로컬 IDS/IPS를 제공하는 것이었습니다.
 
 
-Slips is supported on Linux, MacOS, and windows dockers only. The blocking features of Slips are only supported on Linux
+Slips는 Linux, MacOS, Windows Docker에서 지원됩니다. Slips의 차단 기능은 Linux에서만 지원됩니다.
 
-Slips is Python-based and relies on [Zeek network analysis framework](https://zeek.org/get-zeek/) for capturing live traffic and analyzing PCAPs. and relies on
-Redis >= 7.0.4 for interprocess communication.
+Slips는 Python 기반이며 실시간 트래픽 캡처 및 PCAP 분석을 위해 [Zeek 네트워크 분석 프레임워크](https://zeek.org/get-zeek/)에 의존합니다. 또한 프로세스 간 통신을 위해 Redis >= 7.0.4에 의존합니다.
 
 ---
 
-# Usage
+# 사용법
 
-The recommended way to use Slips is on Docker.
+Slips를 사용하는 가장 좋은 방법은 Docker를 사용하는 것입니다.
 
-#### Linux and Windows hosts
+#### Linux 및 Windows 호스트
 ```
 docker run --rm -it -p 55000:55000  --cpu-shares "700" --memory="8g" --memory-swap="8g" --net=host --cap-add=NET_ADMIN --name slips stratosphereips/slips:latest
 ```
@@ -85,8 +91,8 @@ docker run --rm -it -p 55000:55000  --cpu-shares "700" --memory="8g" --memory-sw
 cat output_dir/alerts.log
 ```
 
-#### Macos
-In MacOS, do not use --net=host if you want to access the internal container's ports from the host.
+#### MacOS
+MacOS에서는 호스트에서 컨테이너의 내부 포트에 접근하려면 --net=host를 사용하지 마세요.
 
 ```
 docker run --rm -it -p 55000:55000 --platform linux/amd64 --cpu-shares "700" --memory="8g" --memory-swap="8g" --cap-add=NET_ADMIN --name slips stratosphereips/slips_macos_m1:latest
@@ -101,30 +107,29 @@ cat output_dir/alerts.log
 ```
 
 
-[For more installation options](https://stratospherelinuxips.readthedocs.io/en/develop/installation.html#installation)
+[더 많은 설치 옵션](https://stratospherelinuxips.readthedocs.io/en/develop/installation.html#installation)
 
-[For a detailed explanation of Slips parameters](https://stratospherelinuxips.readthedocs.io/en/develop/usage.html#slips-parameters)
+[Slips 매개변수에 대한 자세한 설명](https://stratospherelinuxips.readthedocs.io/en/develop/usage.html#slips-parameters)
 
 ---
 
 
-# Graphical User Interface
+# 그래픽 사용자 인터페이스
 
-To check Slips output using a GUI you can use the web interface
-or our command-line based interface Kalipso
+Slips 출력을 GUI로 확인하려면 웹 인터페이스나 명령줄 기반 인터페이스인 Kalipso를 사용할 수 있습니다.
 
-##### Web interface
+##### 웹 인터페이스
 
     ./webinterface.sh
 
-Then navigate to ```http://localhost:55000/``` from your browser.
+그런 다음 브라우저에서 ```http://localhost:55000/```로 이동하세요.
 
 <img src="https://raw.githubusercontent.com/stratosphereips/StratosphereLinuxIPS/develop/docs/images/web_interface.png" width="850px">
 
-For more info about the web interface, check the docs: https://stratospherelinuxips.readthedocs.io/en/develop/usage.html#the-web-interface
+웹 인터페이스에 대한 자세한 정보는 문서를 확인하세요: https://stratospherelinuxips.readthedocs.io/en/develop/usage.html#the-web-interface
 
 
-##### Kalipso (CLI-Interface)
+##### Kalipso (CLI-인터페이스)
 
     ./kalipso.sh
 
@@ -136,38 +141,37 @@ For more info about the Kalipso interface, check the docs: https://stratospherel
 ---
 
 
-# Requirements
+# 요구사항
 
-Slips requires Python 3.10.12 and at least 4 GBs of RAM to run smoothly.
+Slips는 원활한 실행을 위해 Python 3.10.12와 최소 4GB의 RAM이 필요합니다.
 
 ---
 
-# Installation
+# 설치
 
-
-Slips can be run on different platforms, the easiest and most recommended way if you're a Linux user is to run Slips on Docker.
+Slips는 다양한 플랫폼에서 실행할 수 있으며, Linux 사용자라면 Docker에서 Slips를 실행하는 것이 가장 쉽고 권장되는 방법입니다.
 
 * [Docker](https://stratospherelinuxips.readthedocs.io/en/develop/installation.html#slips-in-docker)
-  * Dockerhub (recommended)
-    * [Linux and windows hosts](https://stratospherelinuxips.readthedocs.io/en/develop/installation.html#linux-and-windows-hosts)
-    * [MacOS hosts](https://stratospherelinuxips.readthedocs.io/en/develop/installation.html#macos-hosts)
+  * Dockerhub (권장)
+    * [Linux 및 Windows 호스트](https://stratospherelinuxips.readthedocs.io/en/develop/installation.html#linux-and-windows-hosts)
+    * [MacOS 호스트](https://stratospherelinuxips.readthedocs.io/en/develop/installation.html#macos-hosts)
   * [Docker-compose](https://stratospherelinuxips.readthedocs.io/en/develop/installation.html#running-slips-using-docker-compose)
   * [Dockerfile](https://stratospherelinuxips.readthedocs.io/en/develop/installation.html#building-slips-from-the-dockerfile)
-* Native
-  * [Using install.sh](https://stratospherelinuxips.readthedocs.io/en/develop/installation.html#install-slips-using-shell-script)
-  * [Manually](https://stratospherelinuxips.readthedocs.io/en/develop/installation.html#installing-slips-manually)
-* [on RPI (Beta)](https://stratospherelinuxips.readthedocs.io/en/develop/installation.html#installing-slips-on-a-raspberry-pi)
+* 네이티브
+  * [install.sh 사용](https://stratospherelinuxips.readthedocs.io/en/develop/installation.html#install-slips-using-shell-script)
+  * [수동 설치](https://stratospherelinuxips.readthedocs.io/en/develop/installation.html#installing-slips-manually)
+* [RPI에서 (베타)](https://stratospherelinuxips.readthedocs.io/en/develop/installation.html#installing-slips-on-a-raspberry-pi)
 
 
 ---
 
 
-# Configuration
-Slips has a [config/slips.yaml](https://github.com/stratosphereips/StratosphereLinuxIPS/blob/develop/config/slips.yaml) that contains user configurations for different modules and general execution.
+# 설정
+Slips는 다양한 모듈과 일반 실행을 위한 사용자 설정이 포함된 [config/slips.yaml](https://github.com/stratosphereips/StratosphereLinuxIPS/blob/develop/config/slips.yaml)을 가지고 있습니다.
 
-* You can change the timewindow width by modifying the ```time_window_width``` parameter
-* You can change the analysis direction to ```all```  if you want to see the attacks from and to your computer
-* You can also specify whether to ```train``` or ```test``` the ML models
+* ```time_window_width``` 매개변수를 수정하여 시간 창 너비를 변경할 수 있습니다
+* 컴퓨터에서 오가는 공격을 보고 싶다면 분석 방향을 ```all```로 변경할 수 있습니다
+* ML 모델을 ```train``` 또는 ```test```할지 지정할 수도 있습니다
 
 * You can enable [popup notifications](https://stratospherelinuxips.readthedocs.io/en/develop/usage.html#popup-notifications) of evidence, enable [blocking](https://stratospherelinuxips.readthedocs.io/en/develop/usage.html#slips-permissions), [plug in your own zeek script](https://stratospherelinuxips.readthedocs.io/en/develop/usage.html#plug-in-a-zeek-script) and more.
 
@@ -176,24 +180,24 @@ Slips has a [config/slips.yaml](https://github.com/stratosphereips/StratosphereL
 
 ---
 
-# Features
-Slips key features are:
+# 기능
+Slips의 주요 기능은:
 
-* **Behavioral Intrusion Prevention**: Slips acts as a powerful system to prevent intrusions based on detecting malicious behaviors in network traffic using machine learning.
-* **Modularity**: Slips is written in Python and is highly modular with different modules performing specific detections in the network traffic.
-* **Targeted Attacks and Command & Control Detection**: It places a strong emphasis on identifying targeted attacks and command and control channels in network traffic.
-* **Traffic Analysis Flexibility**: Slips can analyze network traffic in real-time, PCAP files, and network flows from popular tools like Suricata, Zeek/Bro, and Argus.
-* **Threat Intelligence Updates**: Slips continuously updates threat intelligence files and databases, providing relevant detections as updates occur.
-* **Integration with External Platforms**: Modules in Slips can look up IP addresses on external platforms such as VirusTotal and RiskIQ.
-* **Graphical User Interface**: Slips provides a console graphical user interface (Kalipso) and a web interface for displaying detection with graphs and tables.
-* **Peer-to-Peer (P2P) Module**: Slips includes a complex automatic system to find other peers in the network and share IoC data automatically in a balanced, trusted manner. The P2P module can be enabled as needed.
+* **행동 기반 침입 방지**: Slips는 머신러닝을 사용하여 네트워크 트래픽에서 악의적인 행동을 감지하는 강력한 시스템으로 작동합니다.
+* **모듈성**: Slips는 Python으로 작성되었으며 네트워크 트래픽에서 특정 탐지를 수행하는 다양한 모듈로 구성되어 있습니다.
+* **표적 공격 및 명령 & 제어 탐지**: 네트워크 트래픽에서 표적 공격과 명령 및 제어 채널을 식별하는 데 중점을 둡니다.
+* **트래픽 분석 유연성**: Slips는 실시간 네트워크 트래픽, PCAP 파일, Suricata, Zeek/Bro, Argus와 같은 인기 도구의 네트워크 흐름을 분석할 수 있습니다.
+* **위협 인텔리전스 업데이트**: Slips는 위협 인텔리전스 파일과 데이터베이스를 지속적으로 업데이트하여 업데이트가 발생할 때 관련 탐지를 제공합니다.
+* **외부 플랫폼과의 통합**: Modules in Slips can look up IP addresses on external platforms such as VirusTotal and RiskIQ.
+* **그래픽 사용자 인터페이스**: Slips는 탐지를 그래프와 테이블로 표시하는 콘솔 그래픽 사용자 인터페이스(Kalipso)와 웹 인터페이스를 제공합니다.
+* **피어투피어(P2P) 모듈**: Slips는 네트워크에서 다른 피어를 찾고 IoC 데이터를 균형 있고 신뢰할 수 있는 방식으로 자동으로 공유하는 복잡한 자동 시스템을 포함합니다. The P2P module can be enabled as needed.
 * **Docker Implementation**: Running Slips through Docker on Linux systems is simplified, allowing real-time traffic analysis.
 * **Detailed Documentation**: Slips provides detailed documentation guiding users through usage instructions for efficient utilization of its features.
 * **Federated learning** Using the feel_project submodule. for more information [check the docs](https://github.com/stratosphereips/feel_project/blob/main/docs/Federated_Learning.md)
 
 ---
 
-# Contributing
+# 기여하기
 
 We welcome contributions to improve the functionality and features of Slips.
 
@@ -213,14 +217,14 @@ We appreciate your contributions and thank you for helping to improve Slips!
 
 ---
 
-# Documentation
+# 문서
 [User documentation](https://stratospherelinuxips.readthedocs.io/en/develop/)
 
 [Code docs](https://stratospherelinuxips.readthedocs.io/en/develop/code_documentation.html )
 
 ---
 
-# Troubleshooting
+# 문제해결
 
 If you can't listen to an interface without sudo, foe example when zeek is throwing the following error:
 ```bash
@@ -245,14 +249,14 @@ Or email us at
 
 ---
 
-# License
+# 라이선스
 
  [GNU General Public License](https://github.com/stratosphereips/StratosphereLinuxIPS/blob/master/LICENCE)
 
 ---
 
 
-# Credits
+# 크레딧
 
 Founder: [Sebastian Garcia](https://github.com/eldraco), sebastian.garcia@agents.fel.cvut.cz, eldraco@gmail.com.
 
@@ -274,14 +278,14 @@ Contributors:
 ---
 
 
-# Changelog
+# 변경이력
 
 https://github.com/stratosphereips/StratosphereLinuxIPS/blob/develop/CHANGELOG.md
 
 
 ---
 
-# Demos
+# 데모
 The following videos contain demos of Slips in action in various events:
 
 - 2022 BlackHat Europe Arsenal, Slips: A Machine-Learning Based, Free-Software, Network Intrusion Prevention System [[web](https://www.blackhat.com/eu-22/arsenal/schedule/index.html#slips-free-software-machine-learning-tool-for-network-intrusion-prevention-system-29599)]
@@ -295,7 +299,7 @@ The following videos contain demos of Slips in action in various events:
 
 ---
 
-# Funding
+# 자금지원
 We are grateful for the generous support and funding provided by the following organizations:
 
 
