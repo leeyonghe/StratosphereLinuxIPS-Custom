@@ -48,9 +48,6 @@ services:
     network_mode: host  # For Linux/Windows hosts
     depends_on:
       - redis
-    # For MacOS, comment out network_mode and uncomment the following:
-    # networks:
-    #   - slips_network
     runtime: nvidia  # Use NVIDIA runtime
     devices:
       - /dev/nvidia0:/dev/nvidia0  # Mount NVIDIA device
@@ -60,8 +57,3 @@ services:
 volumes:
   redis_data:
     driver: local
-
-# For MacOS, uncomment this:
-# networks:
-#   slips_network:
-#     driver: bridge 
