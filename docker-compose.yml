@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  slips:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: slips
+    platform: linux/amd64  # For MacOS compatibility
+    ports:
+      - "55000:55000"  # Web interface port
+    environment:
+      - TZ=UTC
+      - NVIDIA_VISIBLE_DEVICES=all  # Enable all NVIDIA GPUs
+    volumes:
+      - ./dataset:/StratosphereLinuxIPS/dataset  # For PCAP files
+      - ./output:/StratosphereLinuxIPS/output    # For output files
+    deploy:
+      resources:
+        limits:
+          cpus: '0.7'  # 70% of CPU
+          memory: 8G
+        reservations:
+          memory: 4G
+      placement:
+        constraints:
+          - "node.labels.gpu==true"  # Only run on nodes with GPU
+    cap_add:
+      - NET_ADMIN  # Required for network monitoring
+    network_mode: host  # For Linux/Windows hosts
+    # For MacOS, comment out network_mode and uncomment the following:
+    # networks:
+    #   - slips_network
+    runtime: nvidia  # Use NVIDIA runtime
+    devices:
+      - /dev/nvidia0:/dev/nvidia0  # Mount NVIDIA device
+      - /dev/nvidiactl:/dev/nvidiactl
+      - /dev/nvidia-modeset:/dev/nvidia-modeset
+
+# For MacOS, uncomment this:
+# networks:
+#   slips_network:
+#     driver: bridge 
